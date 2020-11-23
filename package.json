@@ -1,0 +1,16 @@
+{
+  "name": "fetech",
+  "version": "1.0.0",
+  "description": "学习前端中常用的技术，动手实现一些常用的技术雏形",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.12.1",
+    "jest": "^26.6.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT"
+}
