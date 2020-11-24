@@ -6,6 +6,7 @@
 
 * event-emitter
 * native-bridge
+* state-life
 
 
 ## 笔记
