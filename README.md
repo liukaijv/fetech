@@ -7,6 +7,7 @@
 * event-emitter
 * native-bridge
 * state-life
+* canvas-2d
 
 
 ## 笔记

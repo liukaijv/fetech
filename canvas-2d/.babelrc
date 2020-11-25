@@ -1,0 +1,16 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "debug": false,
+        "targets": {
+          "node": true,
+          "browsers": [
+            "last 2 versions"
+          ]
+        }
+      }
+    ]
+  ]
+}
