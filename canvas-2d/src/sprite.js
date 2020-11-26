@@ -54,25 +54,27 @@ export default class Sprite {
     }
 
     draw(ctx) {
-
     }
 
     render(ctx) {
 
-        // this.transform.rotate(this.rotate);
-        // this.transform.scale(this.scaleX, this.scaleY);
-        // this.transform.skew(this.skewX, this.scaleY);
-        // this.transform.translate(this.x, this.y);
-        //
-        // let alpha = this.alpha;
-        // if (this.parent != null) {
-        //     alpha *= this.parent.alpha;
-        //     this.transform.mul(this.parent.transform);
-        // }
-        //
-        // ctx.globalAlpha = alpha;
-        // let {a, b, c, d, e, f} = this.transform;
-        // ctx.setTransform(a, b, c, d, e, f);
+        // 变形处理
+        this.transform.reset();
+        this.transform.rotate(this.rotate * Math.PI / 180);
+        this.transform.scale(this.scaleX, this.scaleY);
+        this.transform.skew(this.skewX, this.skewY);
+        this.transform.translate(this.x, this.y);
+
+        let alpha = this.alpha;
+        if (this.parent != null) {
+            alpha *= this.parent.alpha;
+            this.transform.mul(this.parent.transform);
+        }
+
+        ctx.globalAlpha = alpha;
+
+        let {a, b, c, d, e, f} = this.transform;
+        ctx.setTransform(a, b, c, d, e, f);
 
         if (this.draw) {
             this.draw(ctx);

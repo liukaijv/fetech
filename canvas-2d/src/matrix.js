@@ -40,51 +40,58 @@ export default class Matrix {
     }
 
     rotate(deg) {
-        let cos = Math.cos(deg);
-        let sin = Math.sin(deg);
-        let a1 = this.a;
-        let c1 = this.c;
-        let e1 = this.e;
+        const {a, b, c, d, e, f} = this;
+        const sin = Math.sin(deg);
+        const cos = Math.cos(deg);
 
-        this.a = a1 * cos - this.b * sin;
-        this.b = a1 * sin + this.b * cos;
-        this.c = c1 * cos - this.d * sin;
-        this.d = c1 * sin + this.d * cos;
-        this.tx = e1 * cos - this.ty * sin;
-        this.ty = e1 * sin + this.ty * cos;
+        this.a = a * cos + b * sin;
+        this.b = -a * sin + b * cos;
+        this.c = c * cos + d * sin;
+        this.d = -c * sin + cos * d;
+        this.e = cos * e + sin * f;
+        this.f = cos * f - sin * e;
 
         return this;
     }
 
     skew(x, y) {
-        let tanX = Math.tan(x);
-        let tanY = Math.tan(y);
-        let a1 = this.a;
-        let b1 = this.b;
-        this.a += tanY * this.c;
-        this.b += tanY * this.d;
-        this.c += tanX * a1;
-        this.d += tanX * b1;
+        const tanX = Math.tan(x);
+        const tanY = Math.tan(y);
+        const {a, b, c, d} = this;
+
+        this.a += tanY * c;
+        this.b += tanY * d;
+        this.c += tanX * a;
+        this.d += tanX * b;
+
         return this;
     }
 
-    mul(m2) {
-        let aa = this.a, ab = this.b, ac = this.c, ad = this.d, ae = this.e, af = this.f;
-        let ba = m2.a, bb = m2.b, bc = m2.c, bd = m2.d, be = m2.e, bf = m2.f;
-        if (bb !== 0 || bc !== 0) {
-            this.a = aa * ba + ab * bc;
-            this.b = aa * bb + ab * bd;
-            this.c = ac * ba + ad * bc;
-            this.d = ac * bb + ad * bd;
-            this.e = ba * ae + bc * af + be;
-            this.f = bb * ae + bd * af + bf;
-        } else {
-            this.a = aa * ba;
-            this.b = ab * bd;
-            this.c = ac * ba;
-            this.d = ad * bd;
-            this.e = ba * ae + be;
-            this.f = bd * af + bf;
-        }
+    mul(m1) {
+        const {a, b, c, d, e, f} = this;
+        const a1 = m1.a;
+        const b1 = m1.b;
+        const c1 = m1.c;
+        const d1 = m1.d;
+        const e1 = m1.e;
+        const f1 = m1.f;
+
+        this.a = a * a1 + c * b1;
+        this.b = b * a1 + d * b1;
+        this.c = a * c1 + c * d1;
+        this.d = b * c1 + d * d1;
+        this.e = a * e1 + c * f1 + e;
+        this.f = b * e1 + d * f1 + f;
+
+        return this;
+    }
+
+    reset() {
+        this.a = 1;
+        this.b = 0;
+        this.c = 0;
+        this.d = 1;
+        this.e = 0;
+        this.f = 0;
     }
 }

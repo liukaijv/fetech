@@ -10,9 +10,10 @@ export default class Text extends Sprite {
         this.color = '#000000';
         this.baseline = 'top';
         this.align = 'left';
-        this.lineSpace = undefined;
-        this._text = value;
+        this.lineHeight = undefined;
         this._lines = [];
+        this._text = value;
+        this._checkMultiline();
     }
 
     get text() {
@@ -22,9 +23,13 @@ export default class Text extends Sprite {
     set text(value) {
         if (value !== this._text) {
             this._text = value;
-            this._lines = this._text.split('\n');
-            this._multiline = this._lines.length > 0;
+            this._checkMultiline();
         }
+    }
+
+    _checkMultiline() {
+        this._lines = this._text.split('\n');
+        this._multiline = this._lines.length > 0;
     }
 
     draw(ctx) {
@@ -36,11 +41,11 @@ export default class Text extends Sprite {
 
         if (this._multiline) {
             for (let i = 0, l = this._lines.length; i < l; i++) {
-                let sp = this.lineSpace !== undefined ? this.lineSpace : this.size + 8;
-                ctx.fillText(this._lines[i], 0, i * sp);
+                let lineHeight = this.lineHeight ? this.lineHeight : this.fontSize * 1.5;
+                ctx.fillText(this._lines[i], this.x, this.y + i * lineHeight);
             }
         } else {
-            ctx.fillText(this._text, 0, 0);
+            ctx.fillText(this._text, this.x, this.y);
         }
 
     }

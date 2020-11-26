@@ -2,7 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Title</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
     <script src="bundle.js"></script>
 </head>
 <body>
@@ -10,10 +17,40 @@
 <script>
 
     let canvas = document.getElementById('canvas');
-    CS.init(canvas, 640, 400, "#000")
-    let text = new CS.Text("123");
-    text.color = "#fff";
-    CS.stage.addChild(text)
+    CS.init(canvas, 375, 667, "#000")
+
+    let text1 = new CS.Text("我是单行文字");
+    text1.x = 10;
+    text1.y = 10;
+    text1.fontSize = 12;
+    text1.color = "#fff";
+    CS.stage.addChild(text1)
+
+    let text2 = new CS.Text("我是多行文字我是多行文字我是😉多行文字\n我是多行文字我是多行文字我是多行文字😂\n我是多行文字我是多行文字我是多行文字");
+    text2.x = 10;
+    text2.y = 40;
+    text2.rotate = 10;
+    text2.color = "yellow";
+    text2.fontSize = 12;
+    CS.stage.addChild(text2)
+
+    let img = new CS.Image();
+    img.width = 200;
+    img.height = 200;
+    img.x = 100;
+    img.y = 150;
+    img.rotate = 5;
+    img.load('demo.jpg')
+    CS.stage.addChild(img);
+
+    let img1 = new CS.Image();
+    img1.x = 100;
+    img1.y = 400;
+    img1.scaleX = 0.5;
+    img1.scaleY = 0.8;
+    img1.skewX = 1;
+    img1.load('demo.jpg')
+    CS.stage.addChild(img1);
 
 </script>
 </body>

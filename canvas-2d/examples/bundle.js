@@ -10,7 +10,51 @@ exports.default = void 0;
 
 var _sprite = _interopRequireDefault(require("./sprite"));
 
-var _rectangle = _interopRequireDefault(require("./rectangle"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+var Button = /*#__PURE__*/function (_Sprite) {
+  _inherits(Button, _Sprite);
+
+  var _super = _createSuper(Button);
+
+  function Button() {
+    _classCallCheck(this, Button);
+
+    return _super.apply(this, arguments);
+  }
+
+  return Button;
+}(_sprite.default);
+
+exports.default = Button;
+
+},{"./sprite":6}],2:[function(require,module,exports){
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _sprite = _interopRequireDefault(require("./sprite"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -46,8 +90,6 @@ var Image = /*#__PURE__*/function (_Sprite) {
 
     _this = _super.call(this);
     _this._img = null;
-    _this.bounds = new _rectangle.default();
-    _this.frame = new _rectangle.default();
     return _this;
   }
 
@@ -55,7 +97,8 @@ var Image = /*#__PURE__*/function (_Sprite) {
     key: "draw",
     value: function draw(ctx) {
       if (this._img) {
-        ctx.drawImage(this._img, this.frame.x, this.frame.y, this.frame.w, this.frame.h, this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h);
+        // https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/drawImage
+        ctx.drawImage(this._img, 0, 0, this.width, this.height);
       }
     }
   }, {
@@ -74,10 +117,8 @@ var Image = /*#__PURE__*/function (_Sprite) {
     key: "_onLoaded",
     value: function _onLoaded(img) {
       this._img = img;
-      this.bounds.w = img.width;
-      this.bounds.h = img.height;
-      this.frame.w = img.width;
-      this.frame.h = img.height;
+      this.width = this.width || img.width;
+      this.height = this.height || img.height;
     }
   }]);
 
@@ -86,7 +127,7 @@ var Image = /*#__PURE__*/function (_Sprite) {
 
 exports.default = Image;
 
-},{"./rectangle":4,"./sprite":6}],2:[function(require,module,exports){
+},{"./sprite":6}],3:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -111,6 +152,12 @@ Object.defineProperty(exports, "Text", {
     return _text.default;
   }
 });
+Object.defineProperty(exports, "Button", {
+  enumerable: true,
+  get: function get() {
+    return _button.default;
+  }
+});
 Object.defineProperty(exports, "Render", {
   enumerable: true,
   get: function get() {
@@ -125,10 +172,13 @@ var _sprite = _interopRequireDefault(require("./sprite"));
 
 var _text = _interopRequireDefault(require("./text"));
 
+var _button = _interopRequireDefault(require("./button"));
+
 var _render = _interopRequireDefault(require("./render"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// 全局stage
 var stage;
 exports.stage = stage;
 var initialized = false;
@@ -146,14 +196,15 @@ function init(canvas, width, height) {
   stage.width = width;
   stage.height = height;
   var ctx = canvas.getContext('2d');
-  ctx.imageSmoothingEnabled = true;
-  canvas.style.width = width + 'px';
-  canvas.style.height = height + 'px';
+  ctx.imageSmoothingEnabled = true; // 设置画面大小用的是canvas.width，canvas.height而不是canvas.style.width，canvas.style.height
+
+  canvas.width = width;
+  canvas.height = height;
   canvas.style.backgroundColor = bg;
   new _render.default(ctx, stage);
 }
 
-},{"./image":1,"./render":5,"./sprite":6,"./text":7}],3:[function(require,module,exports){
+},{"./button":1,"./image":2,"./render":5,"./sprite":6,"./text":7}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -221,17 +272,20 @@ var Matrix = /*#__PURE__*/function () {
   }, {
     key: "rotate",
     value: function rotate(deg) {
-      var cos = Math.cos(deg);
+      var a = this.a,
+          b = this.b,
+          c = this.c,
+          d = this.d,
+          e = this.e,
+          f = this.f;
       var sin = Math.sin(deg);
-      var a1 = this.a;
-      var c1 = this.c;
-      var e1 = this.e;
-      this.a = a1 * cos - this.b * sin;
-      this.b = a1 * sin + this.b * cos;
-      this.c = c1 * cos - this.d * sin;
-      this.d = c1 * sin + this.d * cos;
-      this.tx = e1 * cos - this.ty * sin;
-      this.ty = e1 * sin + this.ty * cos;
+      var cos = Math.cos(deg);
+      this.a = a * cos + b * sin;
+      this.b = -a * sin + b * cos;
+      this.c = c * cos + d * sin;
+      this.d = -c * sin + cos * d;
+      this.e = cos * e + sin * f;
+      this.f = cos * f - sin * e;
       return this;
     }
   }, {
@@ -239,45 +293,48 @@ var Matrix = /*#__PURE__*/function () {
     value: function skew(x, y) {
       var tanX = Math.tan(x);
       var tanY = Math.tan(y);
-      var a1 = this.a;
-      var b1 = this.b;
-      this.a += tanY * this.c;
-      this.b += tanY * this.d;
-      this.c += tanX * a1;
-      this.d += tanX * b1;
+      var a = this.a,
+          b = this.b,
+          c = this.c,
+          d = this.d;
+      this.a += tanY * c;
+      this.b += tanY * d;
+      this.c += tanX * a;
+      this.d += tanX * b;
       return this;
     }
   }, {
     key: "mul",
-    value: function mul(m2) {
-      var aa = this.a,
-          ab = this.b,
-          ac = this.c,
-          ad = this.d,
-          ae = this.e,
-          af = this.f;
-      var ba = m2.a,
-          bb = m2.b,
-          bc = m2.c,
-          bd = m2.d,
-          be = m2.e,
-          bf = m2.f;
-
-      if (bb !== 0 || bc !== 0) {
-        this.a = aa * ba + ab * bc;
-        this.b = aa * bb + ab * bd;
-        this.c = ac * ba + ad * bc;
-        this.d = ac * bb + ad * bd;
-        this.e = ba * ae + bc * af + be;
-        this.f = bb * ae + bd * af + bf;
-      } else {
-        this.a = aa * ba;
-        this.b = ab * bd;
-        this.c = ac * ba;
-        this.d = ad * bd;
-        this.e = ba * ae + be;
-        this.f = bd * af + bf;
-      }
+    value: function mul(m1) {
+      var a = this.a,
+          b = this.b,
+          c = this.c,
+          d = this.d,
+          e = this.e,
+          f = this.f;
+      var a1 = m1.a;
+      var b1 = m1.b;
+      var c1 = m1.c;
+      var d1 = m1.d;
+      var e1 = m1.e;
+      var f1 = m1.f;
+      this.a = a * a1 + c * b1;
+      this.b = b * a1 + d * b1;
+      this.c = a * c1 + c * d1;
+      this.d = b * c1 + d * d1;
+      this.e = a * e1 + c * f1 + e;
+      this.f = b * e1 + d * f1 + f;
+      return this;
+    }
+  }, {
+    key: "reset",
+    value: function reset() {
+      this.a = 1;
+      this.b = 0;
+      this.c = 0;
+      this.d = 1;
+      this.e = 0;
+      this.f = 0;
     }
   }]);
 
@@ -285,52 +342,6 @@ var Matrix = /*#__PURE__*/function () {
 }();
 
 exports.default = Matrix;
-
-},{}],4:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var Rectangle = /*#__PURE__*/function () {
-  function Rectangle() {
-    var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-    var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-    var width = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
-    var height = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
-
-    _classCallCheck(this, Rectangle);
-
-    this.x = 0;
-    this.y = 0;
-    this.width = 0;
-    this.height = 0;
-  }
-
-  _createClass(Rectangle, [{
-    key: "right",
-    value: function right() {
-      return this.x + this.width;
-    }
-  }, {
-    key: "bottom",
-    value: function bottom() {
-      return this.y + this.height;
-    }
-  }]);
-
-  return Rectangle;
-}();
-
-exports.default = Rectangle;
 
 },{}],5:[function(require,module,exports){
 "use strict";
@@ -362,7 +373,7 @@ var Render = function Render(ctx, container) {
 
 exports.default = Render;
 
-},{"./index":2}],6:[function(require,module,exports){
+},{"./index":3}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -459,20 +470,29 @@ var Sprite = /*#__PURE__*/function () {
   }, {
     key: "render",
     value: function render(ctx) {
-      // this.transform.rotate(this.rotate);
-      // this.transform.scale(this.scaleX, this.scaleY);
-      // this.transform.skew(this.skewX, this.scaleY);
-      // this.transform.translate(this.x, this.y);
-      //
-      // let alpha = this.alpha;
-      // if (this.parent != null) {
-      //     alpha *= this.parent.alpha;
-      //     this.transform.mul(this.parent.transform);
-      // }
-      //
-      // ctx.globalAlpha = alpha;
-      // let {a, b, c, d, e, f} = this.transform;
-      // ctx.setTransform(a, b, c, d, e, f);
+      // 变形处理
+      this.transform.reset();
+      this.transform.rotate(this.rotate * Math.PI / 180);
+      this.transform.scale(this.scaleX, this.scaleY);
+      this.transform.skew(this.skewX, this.skewY);
+      this.transform.translate(this.x, this.y);
+      var alpha = this.alpha;
+
+      if (this.parent != null) {
+        alpha *= this.parent.alpha;
+        this.transform.mul(this.parent.transform);
+      }
+
+      ctx.globalAlpha = alpha;
+      var _this$transform = this.transform,
+          a = _this$transform.a,
+          b = _this$transform.b,
+          c = _this$transform.c,
+          d = _this$transform.d,
+          e = _this$transform.e,
+          f = _this$transform.f;
+      ctx.setTransform(a, b, c, d, e, f);
+
       if (this.draw) {
         this.draw(ctx);
       }
@@ -498,7 +518,7 @@ var Sprite = /*#__PURE__*/function () {
 
 exports.default = Sprite;
 
-},{"./matrix":3}],7:[function(require,module,exports){
+},{"./matrix":4}],7:[function(require,module,exports){
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -551,13 +571,22 @@ var Text = /*#__PURE__*/function (_Sprite) {
     _this.color = '#000000';
     _this.baseline = 'top';
     _this.align = 'left';
-    _this.lineSpace = undefined;
-    _this._text = value;
+    _this.lineHeight = undefined;
     _this._lines = [];
+    _this._text = value;
+
+    _this._checkMultiline();
+
     return _this;
   }
 
   _createClass(Text, [{
+    key: "_checkMultiline",
+    value: function _checkMultiline() {
+      this._lines = this._text.split('\n');
+      this._multiline = this._lines.length > 0;
+    }
+  }, {
     key: "draw",
     value: function draw(ctx) {
       ctx.font = "".concat(this.fontweight, " ").concat(this.fontSize, "pt ").concat(this.fontfamily);
@@ -567,11 +596,11 @@ var Text = /*#__PURE__*/function (_Sprite) {
 
       if (this._multiline) {
         for (var i = 0, l = this._lines.length; i < l; i++) {
-          var sp = this.lineSpace !== undefined ? this.lineSpace : this.size + 8;
-          ctx.fillText(this._lines[i], 0, i * sp);
+          var lineHeight = this.lineHeight ? this.lineHeight : this.fontSize * 1.5;
+          ctx.fillText(this._lines[i], this.x, this.y + i * lineHeight);
         }
       } else {
-        ctx.fillText(this._text, 0, 0);
+        ctx.fillText(this._text, this.x, this.y);
       }
     }
   }, {
@@ -582,8 +611,8 @@ var Text = /*#__PURE__*/function (_Sprite) {
     set: function set(value) {
       if (value !== this._text) {
         this._text = value;
-        this._lines = this._text.split('\n');
-        this._multiline = this._lines.length > 0;
+
+        this._checkMultiline();
       }
     }
   }]);
@@ -593,5 +622,5 @@ var Text = /*#__PURE__*/function (_Sprite) {
 
 exports.default = Text;
 
-},{"./sprite":6}]},{},[2])(2)
+},{"./sprite":6}]},{},[3])(3)
 });

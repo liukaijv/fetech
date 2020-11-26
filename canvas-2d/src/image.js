@@ -1,19 +1,16 @@
 import Sprite from "./sprite";
-import Rectangle from "./rectangle";
 
 export default class Image extends Sprite {
     constructor() {
         super();
         this._img = null;
-        this.bounds = new Rectangle();
-        this.frame = new Rectangle();
     }
 
     draw(ctx) {
         if (this._img) {
+            // https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/drawImage
             ctx.drawImage(this._img,
-                this.frame.x, this.frame.y, this.frame.w, this.frame.h,
-                this.bounds.x, this.bounds.y, this.bounds.w, this.bounds.h
+                0, 0, this.width, this.height,
             );
         }
     }
@@ -28,9 +25,7 @@ export default class Image extends Sprite {
 
     _onLoaded(img) {
         this._img = img;
-        this.bounds.w = img.width;
-        this.bounds.h = img.height;
-        this.frame.w = img.width;
-        this.frame.h = img.height;
+        this.width = this.width || img.width;
+        this.height = this.height || img.height;
     }
 }
