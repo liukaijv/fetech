@@ -8,6 +8,7 @@
 * native-bridge
 * state-life
 * canvas-2d
+* download-file
 
 
 ## 笔记
