@@ -4,11 +4,11 @@
 
 ## 目录
 
-* event-emitter
-* native-bridge
-* state-life
-* canvas-2d
-* download-file
+* event-emitter 观察者pub/sub模式
+* native-bridge 与原生交互
+* state-life 状态管理
+* canvas-2d canvas2d渲染
+* download-file 关于文件下载
 
 
 ## 笔记
