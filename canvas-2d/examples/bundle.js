@@ -565,9 +565,9 @@ var Text = /*#__PURE__*/function (_Sprite) {
     _classCallCheck(this, Text);
 
     _this = _super.call(this);
-    _this.fontSize = 20;
+    _this.fontSize = 16;
     _this.fontfamily = 'Arial';
-    _this.fontweight = 'normal';
+    _this.fontWeight = 'normal';
     _this.color = '#000000';
     _this.baseline = 'top';
     _this.align = 'left';
@@ -589,7 +589,7 @@ var Text = /*#__PURE__*/function (_Sprite) {
   }, {
     key: "draw",
     value: function draw(ctx) {
-      ctx.font = "".concat(this.fontweight, " ").concat(this.fontSize, "pt ").concat(this.fontfamily);
+      ctx.font = "".concat(this.fontWeight, " ").concat(this.fontSize, "pt ").concat(this.fontfamily);
       ctx.textBaseline = this.baseline;
       ctx.textAlign = this.align;
       ctx.fillStyle = this.color;

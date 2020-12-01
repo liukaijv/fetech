@@ -4,9 +4,9 @@ export default class Text extends Sprite {
 
     constructor(value = 'value') {
         super();
-        this.fontSize = 20;
+        this.fontSize = 16;
         this.fontfamily = 'Arial';
-        this.fontweight = 'normal';
+        this.fontWeight = 'normal';
         this.color = '#000000';
         this.baseline = 'top';
         this.align = 'left';
@@ -34,7 +34,7 @@ export default class Text extends Sprite {
 
     draw(ctx) {
 
-        ctx.font = `${this.fontweight} ${this.fontSize}pt ${this.fontfamily}`;
+        ctx.font = `${this.fontWeight} ${this.fontSize}pt ${this.fontfamily}`;
         ctx.textBaseline = this.baseline;
         ctx.textAlign = this.align;
         ctx.fillStyle = this.color;
