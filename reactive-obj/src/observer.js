@@ -2,12 +2,15 @@ import Observable from './observable'
 
 export class Observer {
 
-    constructor(context, getter, callback) {
+    constructor(context, getter, callback, immediate = false) {
         this.unsubscribes = [];
         this.context = context;
         this.getter = getter;
         this.callback = callback;
         this.lastValue = this._get();
+        if (immediate) {
+            this.triggerImmediate();
+        }
     }
 
     _get() {
@@ -20,13 +23,17 @@ export class Observer {
         }
     }
 
-    update() {
+    update(force = false) {
         const {lastValue, context} = this;
         const newValue = this._get();
-        if (lastValue !== newValue) {
+        if (force || (lastValue !== newValue)) {
             this.callback.call(context, newValue, lastValue);
             this.lastValue = newValue;
         }
+    }
+
+    triggerImmediate() {
+        this.update(true);
     }
 
     subscribe(observable, key) {

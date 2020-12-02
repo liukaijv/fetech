@@ -1,6 +1,7 @@
 import Reactive from './index'
 
 test('test', () => {
+
     let data$ = Reactive.create({
         foo: 1,
         bar: {
@@ -15,6 +16,10 @@ test('test', () => {
     let sub2 = data$.subscribe(() => data$.bar.name, (newVal, oldVal) => {
         console.log('bar.name', newVal, oldVal);
     })
+
+    let sub3 = data$.subscribe(() => data$.foo, (newVal, oldVal) => {
+        console.log('foo3', newVal, oldVal);
+    }, true)
 
     data$.foo = 2;
     data$.bar.name = 'tim';
