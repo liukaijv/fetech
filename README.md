@@ -10,6 +10,7 @@
 * canvas-2d canvas2d渲染
 * download-file 关于文件下载
 * reactive-obj 响应式对象
+* bloom-filter 布隆过滤器
 
 
 ## 笔记
