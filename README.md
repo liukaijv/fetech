@@ -11,7 +11,8 @@
 * download-file 关于文件下载
 * reactive-obj 响应式对象
 * bloom-filter 布隆过滤器
-* bignumber 大数
+* bignumber 大数运算
+* timer-wheel 时间轮
 
 
 ## 笔记

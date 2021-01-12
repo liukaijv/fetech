@@ -8,8 +8,7 @@ export default class BigNumber {
             this.sign = initial.sign;
             this.number = initial.number;
         } else {
-            this.number = ('' + initial).split('').map(item => +item);
-
+            this.number = ('' + initial).split('');
             if (this.number[0] === '+') {
                 this.sign = 1;
                 this.number.shift();
@@ -17,8 +16,14 @@ export default class BigNumber {
                 this.sign = -1;
                 this.number.shift();
             }
+            this.number = this.number.map(item => +item);
         }
+    }
 
+    static abs(number) {
+        let bigNumber = new BigNumber(number);
+        bigNumber.sign = 1;
+        return bigNumber;
     }
 
     /**
@@ -82,12 +87,13 @@ export default class BigNumber {
     add(number) {
         let bigNumber = (number instanceof BigNumber) ? number : new BigNumber(number);
         if (this.sign !== bigNumber.sign) {
+            // 正数+负数
             if (this.sign > 0) {
                 bigNumber.sign = 1;
                 return this.sub(bigNumber);
             } else {
                 this.sign = 1;
-                bigNumber.sub(this);
+                return bigNumber.sub(this);
             }
         }
 
@@ -117,11 +123,44 @@ export default class BigNumber {
      */
     sub(number) {
         let bigNumber = (number instanceof BigNumber) ? number : new BigNumber(number);
+
+        // 符号不相同
+        if (this.sign !== bigNumber.sign) {
+            // // 正数减负数
+            // if(this.sign>0){
+            //     return  this._add(this,bigNumber);
+            // }else {
+            //     return  this._add(this,bigNumber);
+            // }
+            this.number = this._add(this, bigNumber);
+            return this;
+        }
+
+        let compared = this._compare(bigNumber);
+        this.sign = compared < 0 ? -1 : 1;
+
+        // 绝对值大的作为减数
+        this.number = BigNumber.abs(this)._compare(BigNumber.abs(bigNumber)) > -1
+            ? this._sub(this, bigNumber)
+            : this._sub(bigNumber, this);
+
         return this;
     }
 
     _sub(a, b) {
-
+        this._pad(a, b);
+        let len = Math.max(a.number.length, b.number.length);
+        // [1,2,3,4,5] - [0,0,1,5.6]
+        for (let i = len - 1; i > -1; i--) {
+            if (a.number[i] >= b.number[i]) {
+                a.number[i] = (a.number[i] - b.number[i]) % 10;
+            } else {
+                // 借一位
+                a.number[i - 1] = a.number[i - 1] - 1;
+                a.number[i] = ((a.number[i] + 10) - b.number[i]) % 10;
+            }
+        }
+        return a.number;
     }
 
     mul(number) {
@@ -141,7 +180,8 @@ export default class BigNumber {
     }
 
     toString() {
-        return this.number.join('');
+        let str = this.number.join('').replace(/&0+/, '');
+        return this.sign === -1 ? '-' + str : str;
     }
 
 }
