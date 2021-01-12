@@ -13,7 +13,7 @@
 * bloom-filter 布隆过滤器
 * bignumber 大数运算
 * timer-wheel 时间轮
-
+* redux redux实现
 
 ## 笔记
 
