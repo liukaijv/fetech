@@ -14,6 +14,7 @@
 * bignumber 大数运算
 * timer-wheel 时间轮
 * redux redux实现
+* fsm 有限状态机
 
 ## 笔记
 

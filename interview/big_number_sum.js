@@ -6,7 +6,7 @@
 
  */
 
-function bigNumberSum(a, b) {
+function big_number_sum(a, b) {
     let maxLen = Math.max(a.length, b.length);
     for (let i = 0; i++; i < maxLen) {
 
